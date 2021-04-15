@@ -35,22 +35,29 @@ def appendToMain(e):
 
 
 while exitCode:
-    tableWrite(mainList)
+    total = tableWrite(mainList)
     if helpVar: help()
 
     try:
         user = myInput( '\ninput> ')
 
-        if 'save' in user: pass ###
         if user[0]=='exit':
             break
         
+        if user[0]=='help' and len(user)==1:
+            helpVar = 1
+        elif user==['help', '-hide']:
+            helpVar = 0
+
         if user[0]=='add':
             mainList.append(appendToMain(1))
         elif user[0]=='edit':
             mainList[ int(user[1])] = appendToMain(3)
         elif user[0]=='remove':
             del mainList[ int(user[1])]
+        
+        if 'save' in user:
+            saveDetails(mainList, total)
         
     except:
         helpVar = 1

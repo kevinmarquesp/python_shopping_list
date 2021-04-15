@@ -1,4 +1,5 @@
-from os import system, name
+from os import system, name, remove
+from datetime import date
 
 
 def intToDecimal(n):
@@ -74,7 +75,7 @@ def tableWrite(arr):
             )
 
             total["items"] += int(v["amount"])
-            total["price"] += v["price"]
+            total["price"] += v["total"]
         
         print()
         for k,v1 in total.items():
@@ -87,4 +88,78 @@ def tableWrite(arr):
     
     print('\n' +'-'*60)
 
-#add Arroz 24,84 3
+    try:
+        return total
+    except:
+        return None
+
+
+def saveDetails(arr, total):
+    with open('index.html', 'w') as index:
+
+        index.write('''<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            * { font-family: Arial; padding: 0;
+                margin: 0; font-size: .9rem; }
+            main { padding: 35px 20px; }
+            h1 { font-weight: normal; }
+            h1 span { font-size: 1.5rem; }
+            table { text-align: left; margin-top: 1.5rem; }
+            table, table * { border-collapse: collapse; }
+            table tr td, table tr th { padding: 5px 20px; }           
+            #final tr th { text-align: center; }
+            .head { background-color: #112d79; color: white; }
+            .gray { background-color: #eeeeee; }
+            .blue { color: #112d79; }
+            .bold { font-weight: bold; }
+        </style>
+    </head>
+    <body>
+        <main>
+        \t''')
+
+        index.write(f'<h1> <span class="bold blue">Planilha registrada em:</span> <span>{date.today()}</span> </h1>')
+        index.write('''
+            <table id="list">
+                <tr class="head">
+                    <th> Nome </th>
+                    <th> Preço </th>
+                    <th> Quantidade </th>
+                    <th> Total </th>
+                </tr>''')
+        
+        for k,v in enumerate(arr):
+            if k%2==0:
+                color = 'normal'
+            else:
+                color = 'gray'
+            
+            index.write( f'<tr class="{color}"> <td> {v["name"]} </td> <td> {intToDecimal(v["price"])} </td> <td> {int(v["amount"])} </td> <td> {intToDecimal(v["total"])} </td> </tr>')
+        
+        index.write( f'''</table>
+            <table id="final">
+                <tr class="head">
+                    <th colspan="2"> Dados finais </th>
+                </tr>
+                <tr class="normal">
+                    <td class="bold blue"> Produtos </td>
+                    <td> {total["products"]} </td>
+                </tr>
+                <tr class="gray">
+                    <td class="bold blue"> Itens </td>
+                    <td> {total["items"]} </td>
+                </tr>
+                <tr class="normal">
+                    <td class="bold blue"> Preço </td>
+                    <td> {intToDecimal( total["price"])} </td>
+                </tr>
+            </table>
+        </main>
+    </body>
+</html>
+        ''')
+        
+
+# add Arroz 24,84 3
